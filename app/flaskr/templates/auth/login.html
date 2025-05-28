@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}
+ログイン
+{% endblock %}
+
+{% block header %}
+<div>
+    <p>帳票管理システム</p>
+</div>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+    <input type="text" name="email" placeholder="Email">
+    <input type="password" name="password" placeholder="Password">
+    <button type="submit">Login</button>
+</form>
+{% endblock %}
