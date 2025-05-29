@@ -172,3 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Project defined
+node_modules/
+app/flaskr/static/index.js
+app/flaskr/static/style.css
