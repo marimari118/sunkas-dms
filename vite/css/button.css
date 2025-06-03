@@ -1,0 +1,71 @@
+.button-primary {
+    display: block;
+    border-radius: var(--radius-md);
+    padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+    color: var(--color-white);
+    background-color: var(--color-blue-600);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    text-shadow: var(--shadow-xs);
+    cursor: pointer;
+    transition: all cubic-bezier(0.215, 0.610, 0.355, 1) 200ms;
+
+    &:hover {
+        background-color: var(--color-blue-500);
+    }
+
+    &:focus-visible {
+        outline-style: var(--tw-outline-style);
+        outline-width: 2px;
+        outline-offset: 2px;
+        outline-color: var(--color-blue-600);
+    }
+}
+
+.button-secondary {
+    display: block;
+    border-radius: var(--radius-md);
+    padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+    color: var(--color-white);
+    background-color: var(--color-gray-600);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    text-shadow: var(--shadow-xs);
+    cursor: pointer;
+    transition: all cubic-bezier(0.215, 0.610, 0.355, 1) 200ms;
+
+    &:hover {
+        background-color: var(--color-gray-500);
+    }
+
+    &:focus-visible {
+        outline-style: var(--tw-outline-style);
+        outline-width: 2px;
+        outline-offset: 2px;
+        outline-color: var(--color-gray-600);
+    }
+}
+
+.button-caution {
+    display: block;
+    border-radius: var(--radius-md);
+    padding: calc(var(--spacing) * 2) calc(var(--spacing) * 4);
+    color: var(--color-white);
+    background-color: var(--color-red-500);
+    font-size: var(--text-sm);
+    font-weight: var(--font-weight-semibold);
+    text-shadow: var(--shadow-xs);
+    cursor: pointer;
+    transition: all cubic-bezier(0.215, 0.610, 0.355, 1) 200ms;
+
+    &:hover {
+        background-color: var(--color-red-400);
+    }
+
+    &:focus-visible {
+        outline-style: var(--tw-outline-style);
+        outline-width: 2px;
+        outline-offset: 2px;
+        outline-color: var(--color-red-500);
+    }
+}

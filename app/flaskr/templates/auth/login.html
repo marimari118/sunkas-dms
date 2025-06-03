@@ -1,19 +1,35 @@
 {% extends 'base.html' %}
 
-{% block title %}
-ログイン
-{% endblock %}
-
-{% block header %}
-<div>
-    <p>帳票管理システム</p>
-</div>
-{% endblock %}
+{% block title %}ログイン{% endblock %}
 
 {% block content %}
-<form method="post">
-    <input type="text" name="email" placeholder="Email">
-    <input type="password" name="password" placeholder="Password">
-    <button type="submit">Login</button>
-</form>
+<div class="form-container max-w-md">
+    <form method="post">
+        {{ form.csrf_token }}
+        <fieldset>
+            <div class="form-input">
+                {{ form.email.label }}
+                {{ form.email(size=32) }}
+                {% for error in form.email.errors %}
+                <span class="text-red-500">{{ error }}</span>
+                {% endfor %}
+            </div>
+            <div class="form-input">
+                {{ form.password.label }}
+                {{ form.password(size=32) }}
+                {% for error in form.password.errors %}
+                <span class="text-red-500">{{ error }}</span>
+                {% endfor %}
+            </div>
+        </fieldset>
+
+        {% if form.verify_error %}
+        <div><span class="text-red-500">{{ form.verify_error }}</span></div>
+        {% endif %}
+
+        <div class="flex items-center gap-x-4">
+            {{ form.submit(class='button-primary') }}
+        </div>
+    </form>
+</div>
 {% endblock %}

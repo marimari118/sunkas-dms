@@ -4,15 +4,11 @@
 トップページ
 {% endblock %}
 
-{% block header %}
-<div>
-    <p>帳票管理システム</p>
-</div>
-<div>
-    <a href="{{ url_for('auth.logout') }}">Logout</a>
-</div>
-{% endblock %}
-
 {% block content %}
-<h1>帳票管理システムへようこそ</h1>
+<div class="absolute inset-0 flex justify-center items-center">
+    <ul class="flex items-center gap-x-4 text-xl font-medium">
+        <li><a href="{{ url_for('customer.index') }}"
+                class="px-3 py-2 text-gray-900 hover:text-blue-600">顧客管理</a></li>
+    </ul>
+</div>
 {% endblock %}

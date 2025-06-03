@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 顧客情報{% endblock %}
+
+{% block content %}
+<div class="model-container">
+    <h1>顧客情報</h1>
+
+    <div class="model-fields">
+        <div class="model-field">
+            <p>顧客名</p>
+            <p>{{ model.name }}</p>
+        </div>
+        <div class="model-field">
+            <p>住所</p>
+            <p>{{ model.address }}</p>
+        </div>
+        <div class="model-field">
+            <p>連絡先</p>
+            <p>{{ model.telephone_number }}</p>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-x-4">
+        <a href="{{ url_for('customer.index') }}" class="button-secondary">戻る</a>
+    </div>
+</div>
+{% endblock %}

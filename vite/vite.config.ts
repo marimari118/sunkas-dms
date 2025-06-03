@@ -6,7 +6,7 @@ export default defineConfig({
     root: resolve(__dirname, 'src'),
     build: {
         outDir: resolve(__dirname, '../app/flaskr/static'),
-        emptyOutDir: true,
+        emptyOutDir: false,
         rollupOptions: {
             input: {
                 main: resolve(__dirname, 'src/index.ts'),

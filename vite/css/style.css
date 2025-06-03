@@ -1,1 +1,10 @@
 @import "tailwindcss" source("../../app/flaskr/templates");
+
+@import "./button.css";
+@import "./form.css";
+@import "./model.css";
+
+h1 {
+    font-size: var(--text-xl);
+    font-weight: var(--font-weight-medium);
+}

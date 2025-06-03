@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 顧客情報編集{% endblock %}
+
+{% block content %}
+<div class="form-container max-w-md">
+    <h1>顧客情報編集</h1>
+
+    <form method="post">
+        {{ form.csrf_token }}
+        <fieldset>
+            <div class="form-input">
+                {{ form.name.label }}
+                {{ form.name() }}
+                {% if form.name.errors %}
+                <ul>
+                    {% for error in form.name.errors %}
+                    <li class="text-red-500">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-textarea">
+                {{ form.address.label }}
+                {{ form.address(rows='4') }}
+                {% if form.address.errors %}
+                <ul>
+                    {% for error in form.address.errors %}
+                    <li class="text-red-500">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-input">
+                {{ form.telephone_number.label }}
+                {{ form.telephone_number() }}
+                {% if form.telephone_number.errors %}
+                <ul>
+                    {% for error in form.telephone_number.errors %}
+                    <li class="text-red-500">{{ error }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </fieldset>
+
+        <div class="flex items-center gap-x-4">
+            <a href="{{ url_for('customer.index') }}" class="button-secondary">戻る</a>
+            {{ form.submit(class='button-primary') }}
+        </div>
+    </form>
+</div>
+{% endblock %}
