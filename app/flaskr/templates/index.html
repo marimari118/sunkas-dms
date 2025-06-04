@@ -9,6 +9,10 @@
     <ul class="flex items-center gap-x-4 text-xl font-medium">
         <li><a href="{{ url_for('customer.index') }}"
                 class="px-3 py-2 text-gray-900 hover:text-blue-600">顧客管理</a></li>
+        <li><a href="{{ url_for('contract.index') }}"
+                class="px-3 py-2 text-gray-900 hover:text-blue-600">契約管理</a></li>
+        <li><a href="{{ url_for('task.index') }}"
+                class="px-3 py-2 text-gray-900 hover:text-blue-600">作業予定</a></li>
     </ul>
 </div>
 {% endblock %}

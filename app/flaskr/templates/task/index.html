@@ -1,0 +1,77 @@
+{% from 'macros/pagination.html' import paginate %}
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 作業予定{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-700">作業予定一覧</h1>
+        <a href="{{ url_for('task.create') }}" class="button-primary">新規登録</a>
+    </div>
+
+    <div class="bg-white shadow-md rounded my-6">
+        <table class="w-full max-w-full table-auto">
+            <thead class="models-header">
+                <tr>
+                    <th>作業場所</th>
+                    <th>予定日</th>
+                    <th>点検</th>
+                    <th>清掃</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="models-body">
+                {% if page.items %}
+                {% for task in page.items %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                        <a href="{{ url_for('task.show', task_id=task.id) }}">
+                            <p>{{ task.contract.customer.name }}</p>
+                            <p>{{ task.contract.installation_address | truncate(20, true) }}</p>
+                        </a>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                        {{ task.estimated_date.strftime('%Y-%m-%d') if task.estimated_date else '' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                        {% if not task.has_cleaning %}
+                        <span class="font-medium">-</span>
+                        {% else %}
+                        <span class="text-red-500 font-bold">✕</span>
+                        {% endif %}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 text-center">
+                        {% if not task.has_inspection %}
+                        <span class="font-medium">-</span>
+                        {% else %}
+                        <span class="text-red-500 font-bold">✕</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="flex justify-end items-center gap-x-2">
+                            <a href="{{ url_for('task.edit', task_id=task.id) }}"
+                                class="button-secondary text-xs px-2 py-1">編集</a>
+                            <form action="{{ url_for('task.delete', task_id=task.id) }}" method="POST"
+                                onsubmit="return confirm('このタスクを本当に削除しますか？')" class="inline">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="button-caution text-xs px-2 py-1">削除</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-center py-10 text-gray-500">
+                        作業タスクはまだ登録されていません。
+                    </td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    {{ paginate(page, 'task.index') }}
+</div>
+{% endblock %}

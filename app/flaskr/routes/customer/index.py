@@ -9,7 +9,7 @@ from flaskr.routes.customer import bp
 @bp.route('/')
 @login_required
 def index():
-    models = db.select(Customer).order_by(Customer.id.desc())
-    page = db.paginate(models, per_page=10)
+    customers = db.select(Customer).order_by(Customer.id.desc())
+    page = db.paginate(customers, per_page=10)
     return render_template('customer/index.html', page=page)
 

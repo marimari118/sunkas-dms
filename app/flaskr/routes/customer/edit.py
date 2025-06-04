@@ -16,14 +16,15 @@ def edit(customer_id):
 
 
 def request_post(customer_id):
-    model = db.get_or_404(Customer, customer_id)
+    customer = db.get_or_404(Customer, customer_id)
     form = CustomerForm()
     if not form.validate_on_submit():
         return render_template('customer/edit.html', form=form, customer_id=customer_id)
     
-    model.name = form.name.data
-    model.address = form.address.data
-    model.telephone_number = form.telephone_number.data
+    customer.name = form.name.data
+    customer.address = form.address.data
+    customer.telephone_number = form.telephone_number.data
+    customer.notes = form.notes.data
 
     try:
         db.session.commit()
@@ -36,6 +37,6 @@ def request_post(customer_id):
 
 @login_required
 def request_fallback(customer_id):
-    customer = db.get_or_404(Customer, customer_id)
-    form = CustomerForm(obj=customer)
+    model = db.get_or_404(Customer, customer_id)
+    form = CustomerForm(obj=model)
     return render_template('customer/edit.html', form=form, customer_id=customer_id)

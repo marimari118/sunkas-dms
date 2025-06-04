@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 契約情報{% endblock %}
+
+{% block content %}
+<div class="model-container">
+    <div class="flex justify-between items-center mt-8">
+        <h1>契約情報</h1>
+        <div class="flex items-center gap-x-4">
+            <a href="{{ url_for('contract.edit', contract_id=contract.id) }}" class="button-secondary">編集</a>
+            <form action="{{ url_for('contract.delete', contract_id=contract.id) }}" method="POST"
+                onsubmit="return confirm('この契約を本当に削除しますか？')" class="inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="button-caution">削除</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="model-fields">
+        <div class="model-field">
+            <p>顧客名</p>
+            <p>{{ contract.customer.name if contract.customer else '未設定' }}</p>
+        </div>
+        <div class="model-field">
+            <p>契約開始日</p>
+            <p>{{ contract.contract_date.strftime('%Y年%m月%d日') if contract.contract_date else '未設定' }}</p>
+        </div>
+        <div class="model-field">
+            <p>契約更新日</p>
+            <p>{{ contract.renewal_date.strftime('%Y年%m月%d日') if contract.renewal_date else '未設定' }}</p>
+        </div>
+        <div class="model-field">
+            <p>設置住所</p>
+            <p>{{ contract.installation_address or '未設定' }}</p>
+        </div>
+        <div class="model-field">
+            <p>浄化槽処理方式</p>
+            <p>{{ contract.septic_tank_treatment_method or '未設定' }}</p>
+        </div>
+        <div class="model-field">
+            <p>浄化槽容量 (人槽)</p>
+            <p>{{ contract.septic_tank_capacity if contract.septic_tank_capacity is not none else '未設定' }}</p>
+        </div>
+        <div class="model-field">
+            <p>備考</p>
+            <p>{{ contract.notes or '未設定' }}</p>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-x-4">
+        <a href="{{ url_for('contract.index') }}" class="button-secondary">戻る</a>
+    </div>
+</div>
+{% endblock %}

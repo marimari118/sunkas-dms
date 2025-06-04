@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, TextAreaField, SubmitField
-from wtforms.validators import DataRequired, Length
+from wtforms.validators import DataRequired, Length, Optional
 
 
 class CustomerForm(FlaskForm):
@@ -36,6 +36,12 @@ class CustomerForm(FlaskForm):
         render_kw={
             "placeholder": "例: 090-1234-5678 / 03-1234-5678",
         }
+    )
+    notes = TextAreaField(
+        '備考',
+        validators=[Optional()],
+        render_kw={"rows": 3, "placeholder": "顧客に関する特記事項などがあれば入力してください。"},
+        description="顧客に関する備考を入力します。"
     )
 
     submit = SubmitField('保存')

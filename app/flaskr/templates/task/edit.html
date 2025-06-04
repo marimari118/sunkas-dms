@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 作業予定編集{% endblock %}
+
+{% block content %}
+<div class="form-container max-w-md">
+    <h1>作業予定編集</h1>
+
+    <form method="post">
+        {{ form.csrf_token }}
+        <fieldset>
+            <div class="form-input">
+                {{ form.contract_id.label(class="form-label") }}
+                {{ form.contract_id(class="form-select w-full") }}
+                {% if form.contract_id.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.contract_id.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-input">
+                {{ form.estimated_date.label(class="form-label") }}
+                {{ form.estimated_date(class="form-input-field", type="date") }}
+                {% if form.estimated_date.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.estimated_date.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-input mt-4">
+                <label class="flex items-center">
+                    {{ form.has_cleaning(class="form-checkbox h-5 w-5 text-blue-600") }}
+                    <span class="ml-2 text-gray-700">{{ form.has_cleaning.label.text }}</span>
+                </label>
+                {% if form.has_cleaning.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.has_cleaning.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-input mt-2">
+                <label class="flex items-center">
+                    {{ form.has_inspection(class="form-checkbox h-5 w-5 text-blue-600") }}
+                    <span class="ml-2 text-gray-700">{{ form.has_inspection.label.text }}</span>
+                </label>
+                {% if form.has_inspection.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.has_inspection.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-input">
+                {{ form.notes.label }}
+                {{ form.notes(rows=4) }}
+                {% if form.notes.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.notes.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </fieldset>
+
+        <div class="flex items-center gap-x-4">
+            <a href="{{ url_for('task.index') }}" class="button-secondary">戻る</a>
+            {{ form.submit(class='button-primary') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

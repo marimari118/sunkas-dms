@@ -9,8 +9,8 @@ from flaskr.routes.customer import bp
 @bp.route('/<int:customer_id>/delete', methods=['POST'])
 @login_required
 def delete(customer_id):
-    model = db.get_or_404(Customer, customer_id)
-    db.session.delete(model)
+    customer = db.get_or_404(Customer, customer_id)
+    db.session.delete(customer)
 
     try:
         db.session.commit()

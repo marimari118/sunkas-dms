@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 作業予定詳細{% endblock %}
+
+{% block content %}
+<div class="model-container">
+
+    <div class="flex justify-between items-center mt-8">
+        <h1>作業予定</h1>
+        <div class="flex items-center gap-x-4">
+            <a href="{{ url_for('task.edit', task_id=task.id) }}" class="button-secondary">編集</a>
+            <form action="{{ url_for('task.delete', task_id=task.id) }}" method="POST"
+                onsubmit="return confirm('この作業タスクを本当に削除しますか？')" class="inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="button-caution">削除</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="model-fields">
+        <div class="model-field">
+            <p>関連情報</p>
+            <div>
+                <p>
+                    {% if task.contract and task.contract.customer %}
+                    <a href="{{ url_for('customer.show', customer_id=task.contract.customer.id) }}"
+                        class="text-blue-600 hover:text-blue-800">
+                        {{ task.contract.customer.name }}
+                    </a>
+                </p>
+                {% endif %}
+                <p>
+                    {% if task.contract %}
+                    <a href="{{ url_for('contract.show', contract_id=task.contract.id) }}"
+                        class="text-blue-600 hover:text-blue-800">
+                        {{ task.contract.installation_address }}
+                    </a>
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        <div class="model-field">
+            <p>作業予定日</p>
+            <p>{{ task.estimated_date.strftime('%Y年%m月%d日') if task.estimated_date else '未設定' }}</p>
+        </div>
+        <div class="model-field">
+            <p>作業内容</p>
+            <div class="space-x-2">
+                {% if task.has_cleaning %}<span>清掃</span>{% endif %}
+                {% if task.has_cleaning %}<span>点検</span>{% endif %}
+            </div>
+        </div>
+        <div class="model-field">
+            <p>備考</p>
+            <p>{{ task.notes or '未設定' }}</p>
+        </div>
+    </div>
+
+    <div>
+        <a href="{{ url_for('task.index') }}" class="button-secondary">戻る</a>
+    </div>
+</div>
+{% endblock %}

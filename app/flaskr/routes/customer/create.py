@@ -20,11 +20,12 @@ def request_post():
     if not form.validate_on_submit():
         return render_template('customer/create.html', form=form)
 
-    model = Customer(
+    customer = Customer(
         name=form.name.data,
         address=form.address.data,
-        telephone_number=form.telephone_number.data)
-    db.session.add(model)
+        telephone_number=form.telephone_number.data,
+        notes=form.notes.data)
+    db.session.add(customer)
 
     try:
         db.session.commit()

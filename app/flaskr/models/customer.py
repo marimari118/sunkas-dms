@@ -10,6 +10,8 @@ class Customer(db.Model):
     name = db.Column(db.String(255), nullable=False)
     address = db.Column(db.String(255), nullable=False)
     telephone_number = db.Column(db.String(255), nullable=False)
+    notes = db.Column(db.Text, nullable=True)
+    
     created_at = db.Column(db.DateTime(timezone=True),
         default=datetime.now(),
         nullable=False)

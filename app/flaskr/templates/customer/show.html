@@ -4,20 +4,34 @@
 
 {% block content %}
 <div class="model-container">
-    <h1>顧客情報</h1>
+    <div class="flex justify-between items-center mt-8">
+        <h1>顧客情報</h1>
+        <div class="flex items-center gap-x-4">
+            <a href="{{ url_for('customer.edit', customer_id=customer.id) }}" class="button-secondary">編集</a>
+            <form action="{{ url_for('customer.delete', customer_id=customer.id) }}" method="POST"
+                onsubmit="return confirm('この契約を本当に削除しますか？')" class="inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="button-caution">削除</button>
+            </form>
+        </div>
+    </div>
 
     <div class="model-fields">
         <div class="model-field">
             <p>顧客名</p>
-            <p>{{ model.name }}</p>
+            <p>{{ customer.name }}</p>
         </div>
         <div class="model-field">
             <p>住所</p>
-            <p>{{ model.address }}</p>
+            <p>{{ customer.address }}</p>
         </div>
         <div class="model-field">
             <p>連絡先</p>
-            <p>{{ model.telephone_number }}</p>
+            <p>{{ customer.telephone_number }}</p>
+        </div>
+        <div class="model-field">
+            <p>備考</p>
+            <p>{{ customer.notes or '未設定' }}</p>
         </div>
     </div>
 

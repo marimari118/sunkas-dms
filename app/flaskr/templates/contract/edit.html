@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 契約情報編集{% endblock %}
+
+{% block content %}
+<div class="form-container max-w-md">
+    <h1>契約情報編集</h1>
+
+    <form method="post">
+        {{ form.csrf_token }}
+        <fieldset>
+            <div class="form-input">
+                {{ form.customer_id.label() }}
+                {{ form.customer_id() }}
+                {% if form.customer_id.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.customer_id.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="grid grid-cols-2 gap-x-4">
+                <div class="form-input">
+                    {{ form.contract_date.label() }}
+                    {{ form.contract_date(type="date") }}
+                    {% if form.contract_date.errors %}
+                    <ul class="text-red-500">
+                        {% for error in form.contract_date.errors %}<li>{{ error }}</li>{% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+
+                <div class="form-input">
+                    {{ form.renewal_date.label() }}
+                    {{ form.renewal_date(type="date") }}
+                    {% if form.renewal_date.errors %}
+                    <ul class="text-red-500">
+                        {% for error in form.renewal_date.errors %}<li>{{ error }}</li>{% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="form-input">
+                {{ form.installation_address.label() }}
+                {{ form.installation_address() }}
+                {% if form.installation_address.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.installation_address.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-input">
+                {{ form.septic_tank_treatment_method.label() }}
+                {{ form.septic_tank_treatment_method() }}
+                {% if form.septic_tank_treatment_method.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.septic_tank_treatment_method.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-input">
+                {{ form.septic_tank_capacity.label() }}
+                {{ form.septic_tank_capacity(type="number") }}
+                {% if form.septic_tank_capacity.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.septic_tank_capacity.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            <div class="form-input">
+                {{ form.notes.label }}
+                {{ form.notes(rows=4) }}
+                {% if form.notes.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.notes.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </fieldset>
+
+        <div class="flex items-center gap-x-4">
+            <a href="{{ url_for('customer.index') }}" class="button-secondary">戻る</a>
+            {{ form.submit(class='button-primary') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

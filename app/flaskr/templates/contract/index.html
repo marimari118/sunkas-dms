@@ -1,0 +1,60 @@
+{% from 'macros/pagination.html' import paginate %}
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 契約一覧{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-700">契約一覧</h1>
+        <a href="{{ url_for('contract.create') }}" class="button-primary">新規登録</a>
+    </div>
+
+    <div class="bg-white shadow-md rounded my-6">
+        <table class="w-full max-w-full table-auto">
+            <thead class="models-header">
+                <tr>
+                    <th>顧客名</th>
+                    <th>設置場所</th>
+                    <th>処理方式</th>
+                    <th>人槽</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody class="models-body">
+                {% if page.items %}
+                {% for contract in page.items %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('contract.show', contract_id=contract.id) }}">
+                            {{ contract.customer.name if contract.customer else 'N/A' }}
+                        </a>
+                    </td>
+                    <td>{{ contract.installation_address | truncate(20, true) }}</td>
+                    <td>{{ contract.septic_tank_treatment_method }}</td>
+                    <td>{{ contract.septic_tank_capacity if contract.septic_tank_capacity is not none else '' }}</td>
+                    <td>
+                        <div class="flex justify-end items-center gap-x-2">
+                            <a href="{{ url_for('contract.edit', contract_id=contract.id) }}"
+                                class="button-secondary text-xs px-2 py-1">編集</a>
+                            <form action="{{ url_for('contract.delete', contract_id=contract.id) }}" method="POST"
+                                onsubmit="return confirm('この契約情報を本当に削除しますか？関連する作業予定なども影響を受ける可能性があります。')" class="inline">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="button-caution text-xs px-2 py-1">削除</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">契約データはまだありません。</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    {{ paginate(page, 'customer.index') }}
+</div>
+{% endblock %}
