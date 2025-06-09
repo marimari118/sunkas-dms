@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 清掃報告詳細{% endblock %}
+
+{% block content %}
+<div class="model-container max-w-xl mx-auto p-4"> {# max-w を調整 #}
+    <div class="flex justify-between items-center mt-8 mb-6">
+        <h1 class="text-2xl font-bold text-gray-700">清掃報告詳細 (ID: {{ report.id }})</h1>
+        <div class="flex items-center gap-x-4">
+            {# url_for のリンク先は仮のものです #}
+            <a href="{{ url_for('cleaning-report.edit', report_id=report.id) }}" class="button-secondary">編集</a>
+            <form action="{{ url_for('cleaning-report.delete', report_id=report.id) }}" method="POST"
+                onsubmit="return confirm('この清掃報告を本当に削除しますか？')" class="inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="button-caution">削除</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="model-fields space-y-4">
+        {# 基本情報セクション #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">関連タスク情報</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">顧客名</p>
+                    <p>{{ report.task.contract.customer.name if report.task and report.task.contract and report.task.contract.customer else 'N/A' }}
+                    </p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">設置場所</p>
+                    <p>{{ report.task.contract.installation_address if report.task and report.task.contract else 'N/A' }}
+                    </p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">タスク予定日</p>
+                    <p>{{ report.task.estimated_date.strftime('%Y年%m月%d日') if report.task and report.task.estimated_date else 'N/A' }}
+                    </p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">タスク種別</p>
+                    <p>{{ report.task.task_type.value if report.task and report.task.task_type else 'N/A' }}</p>
+                    {# Enumの場合 .value が必要 #}
+                </div>
+            </div>
+        </div>
+
+        {# 清掃報告詳細セクション #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">清掃報告詳細</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">実施日時</p>
+                    <p>{{ report.completed_at.strftime('%Y年%m月%d日 %H:%M') if report.completed_at else '未設定' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">容量 (浄化槽の実効容量)</p>
+                    <p>{{ report.capacity if report.capacity is not none else '-' }} ㎥</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">引抜量 (清掃時の引抜量)</p>
+                    <p>{{ report.extraction_volume if report.extraction_volume is not none else '-' }} ㎥</p>
+                </div>
+            </div>
+            <div class="model-field mt-4"> {# notes は幅を取るため別立て #}
+                <p class="font-medium text-gray-600">特記事項 (管理者への伝達事項)</p>
+                <p class="whitespace-pre-wrap p-2 bg-gray-50 rounded min-h-[60px]">{{ report.notes or '特記事項なし' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-x-4 mt-8">
+        {# url_for のリンク先は仮のものです #}
+        <a href="{{ url_for('cleaning-report.index') }}" class="button-secondary">一覧へ戻る</a>
+    </div>
+</div>
+{% endblock %}

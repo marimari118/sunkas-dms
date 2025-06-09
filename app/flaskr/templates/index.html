@@ -7,12 +7,14 @@
 {% block content %}
 <div class="absolute inset-0 flex justify-center items-center">
     <ul class="flex items-center gap-x-4 text-xl font-medium">
-        <li><a href="{{ url_for('customer.index') }}"
-                class="px-3 py-2 text-gray-900 hover:text-blue-600">顧客管理</a></li>
-        <li><a href="{{ url_for('contract.index') }}"
-                class="px-3 py-2 text-gray-900 hover:text-blue-600">契約管理</a></li>
-        <li><a href="{{ url_for('task.index') }}"
-                class="px-3 py-2 text-gray-900 hover:text-blue-600">作業予定</a></li>
+        <li><a href="{{ url_for('customer.index') }}" class="px-3 py-2 text-gray-900 hover:text-blue-600">顧客管理</a></li>
+        <li><a href="{{ url_for('contract.index') }}" class="px-3 py-2 text-gray-900 hover:text-blue-600">契約管理</a></li>
+        <li><a href="{{ url_for('task.index') }}" class="px-3 py-2 text-gray-900 hover:text-blue-600">作業予定</a>
+        <li><a href="{{ url_for('inspection-report.index') }}"
+                class="px-3 py-2 text-gray-900 hover:text-blue-600">点検報告</a>
+        <li><a href="{{ url_for('cleaning-report.index') }}"
+                class="px-3 py-2 text-gray-900 hover:text-blue-600">清掃報告</a>
+        </li>
     </ul>
 </div>
 {% endblock %}

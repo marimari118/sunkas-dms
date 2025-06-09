@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 点検報告詳細{% endblock %}
+
+{% block content %}
+<div class="model-container max-w-3xl mx-auto p-4">
+    <div class="flex justify-between items-center mt-8 mb-6">
+        <h1 class="text-2xl font-bold text-gray-700">点検報告詳細 (ID: {{ report.id }})</h1>
+        <div class="flex items-center gap-x-4">
+            <a href="{{ url_for('inspection-report.edit', report_id=report.id) }}" class="button-secondary">編集</a>
+            <form action="{{ url_for('inspection-report.delete', report_id=report.id) }}" method="POST"
+                onsubmit="return confirm('この点検報告を本当に削除しますか？')" class="inline">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="button-caution">削除</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="model-fields space-y-6">
+        {# 基本情報セクション #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">基本情報</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">関連タスク (顧客名)</p>
+                    <p>{{ report.task.contract.customer.name if report.task and report.task.contract and report.task.contract.customer else 'N/A' }}
+                    </p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">関連タスク (設置場所)</p>
+                    <p>{{ report.task.contract.installation_address if report.task and report.task.contract else 'N/A' }}
+                    </p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">関連タ스크 (予定日)</p>
+                    <p>{{ report.task.estimated_date.strftime('%Y年%m月%d日') if report.task and report.task.estimated_date else 'N/A' }}
+                    </p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">実施日時</p>
+                    <p>{{ report.completed_at.strftime('%Y年%m月%d日 %H:%M') if report.completed_at else '未設定' }}</p>
+                </div>
+            </div>
+        </div>
+
+        {# 環境・外観等 セクション #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">環境・外観等</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">天候</p>
+                    <p>{{ report.weather or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">気温</p>
+                    <p>{{ report.temperature if report.temperature is not none else '-' }} ℃</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">異常な臭気</p>
+                    <p>{{ report.abnormal_odor or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">異常な騒音・振動</p>
+                    <p>{{ report.abnormal_noise_vibration or '-' }}</p>
+                </div>
+            </div>
+        </div>
+
+        {# 検水 セクション #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">検水</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">処理水-水温</p>
+                    <p>{{ report.water_inspection_temperature if report.water_inspection_temperature is not none else '-' }}
+                        ℃</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">処理水-透視度</p>
+                    <p>{{ report.water_inspection_clarity if report.water_inspection_clarity is not none else '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">処理水-pH</p>
+                    <p>{{ report.water_inspection_ph if report.water_inspection_ph is not none else '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">処理水-DO</p>
+                    <p>{{ report.water_inspection_do if report.water_inspection_do is not none else '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">処理水-残留塩素</p>
+                    <p>{{ report.water_inspection_residual_chlorine if report.water_inspection_residual_chlorine is not none else '-' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {# ブロワ制御機器 #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">ブロワ制御機器</h2>
+            <div class="model-field">
+                <p class="font-medium text-gray-600">ブロワ動作状況・フィルター清掃等</p>
+                <p class="whitespace-pre-wrap">{{ report.blower_status_filter_cleaning or '-' }}</p>
+            </div>
+        </div>
+
+        {# 躯体スラブマンホール #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">躯体スラブマンホール</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">マンホール等の破損状況</p>
+                    <p>{{ report.manhole_damage_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">躯体の変形・破損等</p>
+                    <p>{{ report.structure_deformation_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">漏水の状況</p>
+                    <p>{{ report.water_leakage_status or '-' }}</p>
+                </div>
+            </div>
+        </div>
+
+        {# 流入 #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">流入</h2>
+            <div class="model-field">
+                <p class="font-medium text-gray-600">流入状況（異物・油脂類の混入）</p>
+                <p>{{ report.influent_foreign_matter_status or '-' }}</p>
+            </div>
+        </div>
+
+        {# １次処理 #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">１次処理</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">第１室の状況</p>
+                    <p>{{ report.primary_treatment_chamber1_condition or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">第２室の状況</p>
+                    <p>{{ report.primary_treatment_chamber2_condition or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">移流口等の状況</p>
+                    <p>{{ report.primary_treatment_transfer_port_condition or '-' }}</p>
+                </div>
+            </div>
+        </div>
+
+        {# 好気性生物反応槽（共通） #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">好気性生物反応槽（共通）</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">ばっ気撹拌の状況</p>
+                    <p>{{ report.aerobic_biological_reactor_aeration_agitation_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">発泡の状況</p>
+                    <p>{{ report.aerobic_biological_reactor_foaming_status or '-' }}</p>
+                </div>
+            </div>
+        </div>
+
+        {# 接触ばっ気槽 #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">接触ばっ気槽</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">接触材・移流部の状況</p>
+                    <p>{{ report.contact_aeration_tank_contact_material_transfer_part_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">剥離汚泥の状況</p>
+                    <p>{{ report.contact_aeration_tank_separated_sludge_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">生物膜の状況</p>
+                    <p>{{ report.contact_aeration_tank_biofilm_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">逆洗装置の動作状況</p>
+                    <p>{{ report.contact_aeration_tank_backwash_device_status or '-' }}</p>
+                </div>
+            </div>
+        </div>
+
+        {# 担体流動槽 #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">担体流動槽</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">担体の状況（磨耗等）</p>
+                    <p>{{ report.carrier_fluidized_tank_carrier_condition or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">担体の流動状況</p>
+                    <p>{{ report.carrier_fluidized_tank_carrier_flow_status or '-' }}</p>
+                </div>
+            </div>
+        </div>
+
+        {# 生物ろ過槽 #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">生物ろ過槽</h2>
+            <div class="model-field">
+                <p class="font-medium text-gray-600">逆洗装置の状況</p>
+                <p>{{ report.biological_filter_tank_backwash_device_condition or '-' }}</p>
+            </div>
+        </div>
+
+        {# 処理水槽沈殿槽 #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">処理水槽沈殿槽</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">越流せきの水平・固定状況</p>
+                    <p>{{ report.settling_tank_overflow_weir_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">スカムの生成状況</p>
+                    <p>{{ report.settling_tank_scum_generation_status or '-' }}</p>
+                </div>
+            </div>
+        </div>
+
+        {# 消毒槽 #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">消毒槽</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">汚泥の状況</p>
+                    <p>{{ report.disinfection_tank_sludge_condition or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">消毒剤の接触状況</p>
+                    <p>{{ report.disinfection_tank_disinfectant_contact_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">補充量</p>
+                    <p>{{ report.disinfection_tank_replenishment_amount if report.disinfection_tank_replenishment_amount is not none else '-' }}
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        {# 流入放流ポンプ槽 #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">流入放流ポンプ槽</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">自動制御機器の作動</p>
+                    <p>{{ report.pump_tank_auto_control_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">No.1ポンプの作動状況</p>
+                    <p>{{ report.pump_tank_no1_pump_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">No.2ポンプの作動状況</p>
+                    <p>{{ report.pump_tank_no2_pump_status or '-' }}</p>
+                </div>
+            </div>
+        </div>
+
+        {# 各単位装置 #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">各単位装置</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-3">
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">衛生害虫の発生状況</p>
+                    <p>{{ report.unit_equipment_pest_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">槽内水の越流状況</p>
+                    <p>{{ report.unit_equipment_overflow_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">水位上昇の状況</p>
+                    <p>{{ report.unit_equipment_water_level_rise_status or '-' }}</p>
+                </div>
+                <div class="model-field">
+                    <p class="font-medium text-gray-600">短絡水流の状況</p>
+                    <p>{{ report.unit_equipment_short_circuit_flow_status or '-' }}</p>
+                </div>
+            </div>
+        </div>
+
+        {# 特記事項 #}
+        <div class="bg-white shadow-md rounded p-4">
+            <h2 class="text-lg font-semibold border-b mb-3 pb-2">特記事項 (管理者への伝達事項)</h2>
+            <div class="model-field">
+                <p class="whitespace-pre-wrap">{{ report.notes or '特記事項なし' }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex items-center gap-x-4 mt-8">
+        <a href="{{ url_for('inspection-report.index') }}" class="button-secondary">一覧へ戻る</a>
+    </div>
+</div>
+{% endblock %}

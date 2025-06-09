@@ -1,0 +1,65 @@
+{% from 'macros/pagination.html' import paginate %}
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 点検報告一覧{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-bold text-gray-700">点検報告一覧</h1>
+        <a href="{{ url_for('inspection-report.create') }}" class="button-primary">新規作成</a>
+    </div>
+
+    <div class="bg-white shadow-md rounded my-6">
+        <table class="w-full max-w-full table-auto">
+            <thead class="models-header">
+                <tr>
+                    <th>顧客名</th>
+                    <th>設置場所</th>
+                    <th>実施日時</th>
+                    <th>天候</th>
+                    <th>pH</th>
+                    <th></th> {# アクションボタン用ヘッダー #}
+                </tr>
+            </thead>
+            <tbody class="models-body">
+                {% if page.items %}
+                {% for report in page.items %}
+                <tr>
+                    <td>
+                        <a href="{{ url_for('inspection-report.show', report_id=report.id) }}">
+                            {{ report.task.contract.customer.name if report.task and report.task.contract and report.task.contract.customer else 'N/A' }}
+                        </a>
+                    </td>
+                    <td>{{ report.task.contract.installation_address | truncate(20, true) if report.task and report.task.contract else 'N/A' }}
+                    </td>
+                    <td>{{ report.completed_at.strftime('%Y-%m-%d %H:%M') if report.completed_at else 'N/A' }}</td>
+                    <td>{{ report.weather if report.weather else '-' }}</td>
+                    <td>{{ report.water_inspection_ph if report.water_inspection_ph is not none else '-' }}</td>
+                    <td>
+                        <div class="flex justify-end items-center gap-x-2">
+                            <a href="{{ url_for('inspection-report.show', report_id=report.id) }}"
+                                class="button-secondary text-xs px-2 py-1">詳細</a>
+                            <a href="{{ url_for('inspection-report.edit', report_id=report.id) }}"
+                                class="button-secondary text-xs px-2 py-1">編集</a>
+                            <form action="{{ url_for('inspection-report.delete', report_id=report.id) }}" method="POST"
+                                onsubmit="return confirm('この点検報告を本当に削除しますか？')" class="inline">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                <button type="submit" class="button-caution text-xs px-2 py-1">削除</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center py-4">点検報告データはまだありません。</td>
+                </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+
+    {{ paginate(page, 'inspection-report.index') }}
+</div>
+{% endblock %}

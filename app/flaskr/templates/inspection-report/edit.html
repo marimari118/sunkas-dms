@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 点検報告 編集{% endblock %}
+
+{% block content %}
+<div class="form-container max-w-md">
+    <h1>点検報告 編集</h1>
+
+    <form method="post">
+        {{ form.csrf_token }}
+        <fieldset>
+            {# タスク選択 - 編集時は通常変更不可にするか、表示のみにする場合が多いですが、現在のビューコードでは選択可能になっています #}
+            <div class="form-input">
+                {{ form.task_id.label() }}
+                {{ form.task_id() }}
+                {% if form.task_id.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.task_id.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            {# 実施日時 #}
+            <div class="form-input">
+                {{ form.completed_at.label() }}
+                {{ form.completed_at(type="datetime-local") }}
+                {% if form.completed_at.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.completed_at.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            {# 環境・外観等 セクション #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">環境・外観等</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                <div class="form-input">
+                    {{ form.weather.label() }}
+                    {{ form.weather() }}
+                    {% if form.weather.errors %}<ul class="text-red-500">
+                        {% for error in form.weather.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.temperature.label() }}
+                    {{ form.temperature(type="number", step="0.1") }}
+                    {% if form.temperature.errors %}<ul class="text-red-500">
+                        {% for error in form.temperature.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.abnormal_odor.label() }}
+                    {{ form.abnormal_odor() }}
+                    {% if form.abnormal_odor.errors %}<ul class="text-red-500">
+                        {% for error in form.abnormal_odor.errors %}<li>{{ error }}</li>{% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.abnormal_noise_vibration.label() }}
+                    {{ form.abnormal_noise_vibration() }}
+                    {% if form.abnormal_noise_vibration.errors %}<ul class="text-red-500">
+                        {% for error in form.abnormal_noise_vibration.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# 検水 セクション #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">検水</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                <div class="form-input">
+                    {{ form.water_inspection_temperature.label() }}
+                    {{ form.water_inspection_temperature(type="number", step="0.1") }}
+                    {% if form.water_inspection_temperature.errors %}<ul class="text-red-500">
+                        {% for error in form.water_inspection_temperature.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.water_inspection_clarity.label() }}
+                    {{ form.water_inspection_clarity(type="number") }}
+                    {% if form.water_inspection_clarity.errors %}<ul class="text-red-500">
+                        {% for error in form.water_inspection_clarity.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.water_inspection_ph.label() }}
+                    {{ form.water_inspection_ph(type="number", step="0.1") }}
+                    {% if form.water_inspection_ph.errors %}<ul class="text-red-500">
+                        {% for error in form.water_inspection_ph.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.water_inspection_do.label() }}
+                    {{ form.water_inspection_do(type="number") }}
+                    {% if form.water_inspection_do.errors %}<ul class="text-red-500">
+                        {% for error in form.water_inspection_do.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.water_inspection_residual_chlorine.label() }}
+                    {{ form.water_inspection_residual_chlorine(type="number", step="0.01") }}
+                    {% if form.water_inspection_residual_chlorine.errors %}<ul class="text-red-500">
+                        {% for error in form.water_inspection_residual_chlorine.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+            </div>
+
+            {# ブロワ制御機器 #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">ブロワ制御機器</h2>
+            <div class="form-input">
+                {{ form.blower_status_filter_cleaning.label() }}
+                {{ form.blower_status_filter_cleaning() }}
+                {% if form.blower_status_filter_cleaning.errors %}<ul class="text-red-500">
+                    {% for error in form.blower_status_filter_cleaning.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
+            </div>
+
+            {# 躯体スラブマンホール #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">躯体スラブマンホール</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                <div class="form-input">
+                    {{ form.manhole_damage_status.label() }}
+                    {{ form.manhole_damage_status() }}
+                    {% if form.manhole_damage_status.errors %}<ul class="text-red-500">
+                        {% for error in form.manhole_damage_status.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.structure_deformation_status.label() }}
+                    {{ form.structure_deformation_status() }}
+                    {% if form.structure_deformation_status.errors %}<ul class="text-red-500">
+                        {% for error in form.structure_deformation_status.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.water_leakage_status.label() }}
+                    {{ form.water_leakage_status() }}
+                    {% if form.water_leakage_status.errors %}<ul class="text-red-500">
+                        {% for error in form.water_leakage_status.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# 流入 #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">流入</h2>
+            <div class="form-input">
+                {{ form.influent_foreign_matter_status.label() }}
+                {{ form.influent_foreign_matter_status() }}
+                {% if form.influent_foreign_matter_status.errors %}<ul class="text-red-500">
+                    {% for error in form.influent_foreign_matter_status.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                {% endif %}
+            </div>
+
+            {# １次処理 #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">１次処理</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                <div class="form-input">
+                    {{ form.primary_treatment_chamber1_condition.label() }}
+                    {{ form.primary_treatment_chamber1_condition() }}
+                    {% if form.primary_treatment_chamber1_condition.errors %}<ul class="text-red-500">
+                        {% for error in form.primary_treatment_chamber1_condition.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.primary_treatment_chamber2_condition.label() }}
+                    {{ form.primary_treatment_chamber2_condition() }}
+                    {% if form.primary_treatment_chamber2_condition.errors %}<ul class="text-red-500">
+                        {% for error in form.primary_treatment_chamber2_condition.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.primary_treatment_transfer_port_condition.label() }}
+                    {{ form.primary_treatment_transfer_port_condition() }}
+                    {% if form.primary_treatment_transfer_port_condition.errors %}<ul class="text-red-500">
+                        {% for error in form.primary_treatment_transfer_port_condition.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+            </div>
+
+            {# 好気性生物反応槽（共通） #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">好気性生物反応槽（共通）</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                <div class="form-input">
+                    {{ form.aerobic_biological_reactor_aeration_agitation_status.label() }}
+                    {{ form.aerobic_biological_reactor_aeration_agitation_status() }}
+                    {% if form.aerobic_biological_reactor_aeration_agitation_status.errors %}<ul class="text-red-500">
+                        {% for error in form.aerobic_biological_reactor_aeration_agitation_status.errors %}<li>
+                            {{ error }}</li>{% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.aerobic_biological_reactor_foaming_status.label() }}
+                    {{ form.aerobic_biological_reactor_foaming_status() }}
+                    {% if form.aerobic_biological_reactor_foaming_status.errors %}<ul class="text-red-500">
+                        {% for error in form.aerobic_biological_reactor_foaming_status.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+            </div>
+
+            {# 接触ばっ気槽 #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">接触ばっ気槽</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                <div class="form-input">
+                    {{ form.contact_aeration_tank_contact_material_transfer_part_status.label() }}
+                    {{ form.contact_aeration_tank_contact_material_transfer_part_status() }}
+                    {% if form.contact_aeration_tank_contact_material_transfer_part_status.errors %}<ul
+                        class="text-red-500">
+                        {% for error in form.contact_aeration_tank_contact_material_transfer_part_status.errors %}<li>
+                            {{ error }}</li>{% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.contact_aeration_tank_separated_sludge_status.label() }}
+                    {{ form.contact_aeration_tank_separated_sludge_status() }}
+                    {% if form.contact_aeration_tank_separated_sludge_status.errors %}<ul class="text-red-500">
+                        {% for error in form.contact_aeration_tank_separated_sludge_status.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.contact_aeration_tank_biofilm_status.label() }}
+                    {{ form.contact_aeration_tank_biofilm_status() }}
+                    {% if form.contact_aeration_tank_biofilm_status.errors %}<ul class="text-red-500">
+                        {% for error in form.contact_aeration_tank_biofilm_status.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.contact_aeration_tank_backwash_device_status.label() }}
+                    {{ form.contact_aeration_tank_backwash_device_status() }}
+                    {% if form.contact_aeration_tank_backwash_device_status.errors %}<ul class="text-red-500">
+                        {% for error in form.contact_aeration_tank_backwash_device_status.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+            </div>
+
+            {# 担体流動槽 #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">担体流動槽</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                <div class="form-input">
+                    {{ form.carrier_fluidized_tank_carrier_condition.label() }}
+                    {{ form.carrier_fluidized_tank_carrier_condition() }}
+                    {% if form.carrier_fluidized_tank_carrier_condition.errors %}<ul class="text-red-500">
+                        {% for error in form.carrier_fluidized_tank_carrier_condition.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.carrier_fluidized_tank_carrier_flow_status.label() }}
+                    {{ form.carrier_fluidized_tank_carrier_flow_status() }}
+                    {% if form.carrier_fluidized_tank_carrier_flow_status.errors %}<ul class="text-red-500">
+                        {% for error in form.carrier_fluidized_tank_carrier_flow_status.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+            </div>
+
+            {# 生物ろ過槽 #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">生物ろ過槽</h2>
+            <div class="form-input">
+                {{ form.biological_filter_tank_backwash_device_condition.label() }}
+                {{ form.biological_filter_tank_backwash_device_condition() }}
+                {% if form.biological_filter_tank_backwash_device_condition.errors %}<ul class="text-red-500">
+                    {% for error in form.biological_filter_tank_backwash_device_condition.errors %}<li>{{ error }}</li>
+                    {% endfor %}</ul>{% endif %}
+            </div>
+
+            {# 処理水槽沈殿槽 #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">処理水槽沈殿槽</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                <div class="form-input">
+                    {{ form.settling_tank_overflow_weir_status.label() }}
+                    {{ form.settling_tank_overflow_weir_status() }}
+                    {% if form.settling_tank_overflow_weir_status.errors %}<ul class="text-red-500">
+                        {% for error in form.settling_tank_overflow_weir_status.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.settling_tank_scum_generation_status.label() }}
+                    {{ form.settling_tank_scum_generation_status() }}
+                    {% if form.settling_tank_scum_generation_status.errors %}<ul class="text-red-500">
+                        {% for error in form.settling_tank_scum_generation_status.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+            </div>
+
+            {# 消毒槽 #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">消毒槽</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                <div class="form-input">
+                    {{ form.disinfection_tank_sludge_condition.label() }}
+                    {{ form.disinfection_tank_sludge_condition() }}
+                    {% if form.disinfection_tank_sludge_condition.errors %}<ul class="text-red-500">
+                        {% for error in form.disinfection_tank_sludge_condition.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.disinfection_tank_disinfectant_contact_status.label() }}
+                    {{ form.disinfection_tank_disinfectant_contact_status() }}
+                    {% if form.disinfection_tank_disinfectant_contact_status.errors %}<ul class="text-red-500">
+                        {% for error in form.disinfection_tank_disinfectant_contact_status.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.disinfection_tank_replenishment_amount.label() }}
+                    {{ form.disinfection_tank_replenishment_amount(type="number", step="0.1") }}
+                    {% if form.disinfection_tank_replenishment_amount.errors %}<ul class="text-red-500">
+                        {% for error in form.disinfection_tank_replenishment_amount.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+            </div>
+
+            {# 流入放流ポンプ槽 #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">流入放流ポンプ槽</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                <div class="form-input">
+                    {{ form.pump_tank_auto_control_status.label() }}
+                    {{ form.pump_tank_auto_control_status() }}
+                    {% if form.pump_tank_auto_control_status.errors %}<ul class="text-red-500">
+                        {% for error in form.pump_tank_auto_control_status.errors %}<li>{{ error }}</li>{% endfor %}
+                    </ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.pump_tank_no1_pump_status.label() }}
+                    {{ form.pump_tank_no1_pump_status() }}
+                    {% if form.pump_tank_no1_pump_status.errors %}<ul class="text-red-500">
+                        {% for error in form.pump_tank_no1_pump_status.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.pump_tank_no2_pump_status.label() }}
+                    {{ form.pump_tank_no2_pump_status() }}
+                    {% if form.pump_tank_no2_pump_status.errors %}<ul class="text-red-500">
+                        {% for error in form.pump_tank_no2_pump_status.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# 各単位装置 #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">各単位装置</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-4">
+                <div class="form-input">
+                    {{ form.unit_equipment_pest_status.label() }}
+                    {{ form.unit_equipment_pest_status() }}
+                    {% if form.unit_equipment_pest_status.errors %}<ul class="text-red-500">
+                        {% for error in form.unit_equipment_pest_status.errors %}<li>{{ error }}</li>{% endfor %}</ul>
+                    {% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.unit_equipment_overflow_status.label() }}
+                    {{ form.unit_equipment_overflow_status() }}
+                    {% if form.unit_equipment_overflow_status.errors %}<ul class="text-red-500">
+                        {% for error in form.unit_equipment_overflow_status.errors %}<li>{{ error }}</li>{% endfor %}
+                    </ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.unit_equipment_water_level_rise_status.label() }}
+                    {{ form.unit_equipment_water_level_rise_status() }}
+                    {% if form.unit_equipment_water_level_rise_status.errors %}<ul class="text-red-500">
+                        {% for error in form.unit_equipment_water_level_rise_status.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+                <div class="form-input">
+                    {{ form.unit_equipment_short_circuit_flow_status.label() }}
+                    {{ form.unit_equipment_short_circuit_flow_status() }}
+                    {% if form.unit_equipment_short_circuit_flow_status.errors %}<ul class="text-red-500">
+                        {% for error in form.unit_equipment_short_circuit_flow_status.errors %}<li>{{ error }}</li>
+                        {% endfor %}</ul>{% endif %}
+                </div>
+            </div>
+
+            {# 特記事項 #}
+            <h2 class="text-lg font-semibold pt-4 border-b mb-2">特記事項</h2>
+            <div class="form-input">
+                {{ form.notes.label() }}
+                {{ form.notes(rows=4) }}
+                {% if form.notes.errors %}<ul class="text-red-500">{% for error in form.notes.errors %}<li>
+                        {{ error }}</li>{% endfor %}</ul>{% endif %}
+            </div>
+        </fieldset>
+
+        <div class="flex items-center gap-x-4 mt-6">
+            <a href="{{ url_for('inspection-report.index') }}" class="button-secondary">戻る</a>
+            {{ form.submit(class='button-primary') }}
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,6 +1,7 @@
 from datetime import datetime
 from flaskr import db
 from flaskr.models.task import Task
+from flaskr.forms.cleaning_report import CleaningReportForm
 
 
 class CleaningReport(db.Model):
@@ -31,6 +32,22 @@ class CleaningReport(db.Model):
 
     task = db.relationship(Task,
         backref=db.backref('cleaning_report', uselist=False, cascade="all, delete-orphan"))
+    
+    @staticmethod
+    def form(form: CleaningReportForm):
+        return CleaningReport(
+            task_id = form.task_id.data,
+            completed_at = form.completed_at.data,
+            capacity = form.capacity.data,
+            extraction_volume = form.extraction_volume.data,
+            notes = form.notes.data)
+        
+    def apply(self, form: CleaningReportForm):
+        self.task_id = form.task_id.data
+        self.completed_at = form.completed_at.data
+        self.capacity = form.capacity.data
+        self.extraction_volume = form.extraction_volume.data
+        self.notes = form.notes.data
 
     def __repr__(self):
         return f'<CleaningReport {self.id} for Task {self.task_id}>'

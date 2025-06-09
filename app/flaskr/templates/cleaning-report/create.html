@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}帳票管理システム - 清掃報告 新規作成{% endblock %}
+
+{% block content %}
+<div class="form-container max-w-md">
+    <h1>清掃報告 新規作成</h1>
+
+    <form method="post">
+        {{ form.csrf_token }}
+        <fieldset>{# 完了日時 #}
+            <div class="form-input">
+                {{ form.completed_at.label() }}
+                {# スニペットのラベルクラスを一部参考 #}
+                {{ form.completed_at(type="datetime-local") }}
+                {# スニペットの入力クラスを一部参考 #}
+                {% if form.completed_at.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.completed_at.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+
+            {# 容量と引抜量のグリッド #}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="form-input">
+                    {{ form.capacity.label() }}
+                    {{ form.capacity(type="number", step="any") }}
+                    {% if form.capacity.errors %}
+                    <ul class="text-red-500">
+                        {% for error in form.capacity.errors %}<li>{{ error }}</li>{% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+
+                <div class="form-input">
+                    {{ form.extraction_volume.label() }}
+                    {{ form.extraction_volume(type="number", step="any") }}
+                    {% if form.extraction_volume.errors %}
+                    <ul class="text-red-500">
+                        {% for error in form.extraction_volume.errors %}<li>{{ error }}</li>{% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+            {# 特記事項 #}
+            <div class="form-input">
+                {{ form.notes.label() }}
+                {{ form.notes(rows=4) }}
+                {# スニペットのtextareaクラスを一部参考 #}
+                {% if form.notes.errors %}
+                <ul class="text-red-500">
+                    {% for error in form.notes.errors %}<li>{{ error }}</li>{% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </fieldset>
+
+        <div class="flex items-center gap-x-4 mt-6">
+            <a href="{{ url_for('cleaning-report.index') }}" class="button-secondary">戻る</a>
+            {{ form.submit(class='button-primary') }}
+        </div>
+    </form>
+</div>
+{% endblock %}
