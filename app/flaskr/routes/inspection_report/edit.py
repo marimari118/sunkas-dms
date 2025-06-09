@@ -38,4 +38,4 @@ def request_fallback(report_id):
     form = InspectionReportForm(obj=report)
     form.task_id.choices = [(x.id, f'{x.contract.customer.name} - {x.contract.installation_address} - {x.estimated_date}')
         for x in Task.query.filter(Task.has_inspection).order_by(Task.estimated_date.desc()).all()]
-    return render_template('inspection-report/create.html', form=form)
+    return render_template('inspection-report/edit.html', form=form)

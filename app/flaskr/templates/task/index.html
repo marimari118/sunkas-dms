@@ -38,7 +38,8 @@
                         {% if not task.has_cleaning %}
                         <span class="font-medium">-</span>
                         {% elif task.cleaning_report %}
-                        <span class="text-lg text-green-400">✓</span>
+                        <a href="{{ url_for('cleaning-report.show', report_id=task.cleaning_report.id) }}"><span
+                            class="text-lg text-green-400">✓</span></a>
                         {% else %}
                         <span class="text-red-500 font-bold">✕</span>
                         {% endif %}
@@ -47,8 +48,8 @@
                         {% if not task.has_inspection %}
                         <span class="font-medium">-</span>
                         {% elif task.inspection_report %}
-                            <a href="{{ url_for('task.edit', task_id=task.id) }}"
-                                class="button-secondary text-xs px-2 py-1"></a><span class="text-lg text-green-400">✓</span></a>
+                        <a href="{{ url_for('inspection-report.show', report_id=task.inspection_report.id) }}"><span
+                            class="text-lg text-green-400">✓</span></a>
                         {% else %}
                         <span class="text-red-500 font-bold">✕</span>
                         {% endif %}
